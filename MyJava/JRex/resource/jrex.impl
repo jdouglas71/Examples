@@ -1,0 +1,14 @@
+# JRex inerfaces implementers
+WindowManager=org.mozilla.jrex.window.JRexWindowManagerImpl
+WindowEventHandler=org.mozilla.jrex.event.window.WindowEventHandler
+HistoryEventHandler=org.mozilla.jrex.event.history.HistoryEventHandler
+ProgressEventHandler=org.mozilla.jrex.event.progress.ProgressEventHandler
+ContextMenuEventHandler=org.mozilla.jrex.event.context.ContextMenuEventHandler
+TooltipEventHandler=org.mozilla.jrex.event.tooltip.TooltipEventHandler
+ObserverEventHandler=org.mozilla.jrex.event.observer.ObserverEventHandler
+URIContentEventHandler=org.mozilla.jrex.event.uricontent.URIContentEventHandler
+JRexMenuBar=org.mozilla.jrex.ui.JRexMenuBarImpl
+JRexStatusBar=org.mozilla.jrex.ui.JRexStatusBarImpl
+JRexToolBar=org.mozilla.jrex.ui.JRexToolBarImpl
+JRexPopupMenu=org.mozilla.jrex.ui.JRexPopupMenuImpl
+JRexPrintPreviewToolBar=org.mozilla.jrex.ui.JRexPrintPreviewToolBarImpl

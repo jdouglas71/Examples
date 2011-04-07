@@ -1,0 +1,21 @@
+#The list of GRE libraries to load
+nspr4
+plc4
+plds4
+xpcom
+xpcom_compat
+mozz
+mozjs
+gkgfx
+js3250
+jsj3250
+jsj
+mozctl
+mozctlx
+softokn3
+nss3
+nssckbi
+ssl3
+smime3
+msgbsutl
+jrex

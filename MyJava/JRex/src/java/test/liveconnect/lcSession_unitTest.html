@@ -1,0 +1,168 @@
+<!-- -*- Mode: Html; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ * ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public
+ * License Version 1.1 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Contributor(s):
+ *   Rich Giuli <richard.giuli@sri.com>
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the NPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the NPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+ -->
+<html>
+<head>
+<title>LCUnitTests</title>
+<script language="javascript">
+var testObjClass;
+var testObj;
+
+function testCreateLCTestClass() {
+    testObjClass = java.lang.Class.forName("test.liveconnect.LCTestClass");
+    testObj = testObjClass.newInstance();
+    testObj.setTestString("Hello, World!");
+    testObj.setTestInt(50);
+    testObj.setTestFloat(15.5);
+    testObj.setTestDouble(85/2);
+    testObj.setTestLong(123456789);
+    testObj.getTestDataMap().put("getTestString", testObj.getTestString());
+    testObj.getTestDataMap().put("getTestInt", testObj.getTestInt());
+    testObj.getTestDataMap().put("getTestFloat", testObj.getTestFloat());
+    testObj.getTestDataMap().put("getTestDouble", testObj.getTestDouble());
+    testObj.getTestDataMap().put("getTestLong", testObj.getTestLong());
+    testObj.getTestDataMap().put("fromjavascript.testList", testCreateList());
+    testObj.getTestDataMap().put("fromjavascript.testClass", testObjClass);
+    testObj.getTestDataMap().put("fromjavascript.window", window);
+    testObj.getTestDataMap().put("fromjavascript.document", document);
+    return testObj;
+}
+
+var ret = null;
+function testCreateList() {
+    ret = java.lang.Class.forName("java.util.Vector").newInstance();
+    ret.add("one");
+    ret.add("two");
+    ret.add("three");
+    ret.add("four");
+    ret.add("five");
+    ret.add("six");
+    ret.add(7);
+    ret.add(4.5);
+    return ret;
+}
+
+// NOTE: If you declare theList as a local var in the function, it is possible
+// that javascript will garbage collect it before another ref is obtained to
+// the java object. Never do this!
+var theList = null;
+function testCreateList2(theListIn) {
+    theList = java.lang.Class.forName("java.util.Vector").newInstance();
+    for (var i = 0; i < theListIn.size(); i++) {
+        theList.add(theListIn.get(i));
+    }
+    theList.add("three");
+    theList.add("four");
+    theList.add("five");
+    theList.add("six");
+    theList.add(7);
+    theList.add(4.5);
+    return theList;
+}
+
+function testStringFunction(msg) {
+    return msg + "_test";
+}
+
+// Note: This is the correct way to return a reference. Note that if the code below were simply:
+//    return testAppObj.getSampleString();
+// This will not work! This is because the local reference may be garbage collected by js before
+// the return value is converted back into a java object, causing a rouge java.lang.Object to be returned
+// instead of the real instance.
+// This same rule applies to local references to java objects in the function. See the above examples.
+var tmp = null;
+function testCallToJava(testAppObj) {
+    tmp = testAppObj.getSampleString();
+    return tmp;
+}
+
+var blank = new Object();
+
+function testCreateNewLargeJSObject() {
+    var foo = new Object();
+    foo.str = "Hello, World!";
+    // Build up a possible memory leak unless this gets garbage collected.
+    for (var i = 0; i < 1000; i++) {
+        foo.str = foo.str + "Hello, World!";
+    }
+    return foo;
+}
+
+function testCreateNewLargeJavaObject(callback) {
+    var largeJava = callback.createLargeJavaObjectImpl();
+}
+
+var globalVar1 = null;
+var globalVar2 = null;
+var globalVar3 = null;
+var globalVar4 = null;
+
+function setGlobalVar1(javaObj) {
+	globalVar1 = javaObj;
+}
+
+function getGlobalVar1() {
+	return globalVar1;
+}
+
+function setGlobalVar2(javaObj) {
+	globalVar2 = javaObj;
+}
+
+function getGlobalVar2() {
+	return globalVar2;
+}
+
+function setGlobalVar3(javaObj) {
+	globalVar3 = javaObj;
+}
+
+function getGlobalVar3() {
+	return globalVar3;
+}
+
+function setGlobalVar4(javaObj) {
+	globalVar4 = javaObj;
+}
+
+function getGlobalVar4() {
+	return globalVar4;
+}
+
+function throwJavaException(callbackObj) {
+    callbackObj.throwJavaException();
+}
+</script>
+</head>
+<body>
+<b>This unit test app will run and then exit, creating a report file, which will be displayed here when finished.</b>
+</body>
+</html>

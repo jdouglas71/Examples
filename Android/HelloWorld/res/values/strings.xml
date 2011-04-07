@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">JHelloWorld</string>
+    <string name="display_text">
+        Jason is really, really cool. From Resource XML.
+    </string>
+</resources>

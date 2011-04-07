@@ -1,0 +1,20 @@
+InstallPath: c:\Test Dir\Jar Files
+JarPath: c:\Test Dir\Jar Files\jars
+ classPath option: -Djava.class.path=c:\Test Dir\Jar Files\jars\FusionFramework.jar;c:\Test Dir\Jar Files\jars\FCAdmin.jar;c:\Test Dir\Jar Files\jars\FusionAE.jar;c:\Test Dir\Jar Files\jars\OSS-infobus.jar;c:\Test Dir\Jar Files\jars\smatrix.jar;c:\Test Dir\Jar Files\jars\jama.jar;c:\Test Dir\Jar Files\jars\activation.jar;c:\Test Dir\Jar Files\jars\mail.jar;c:\Test Dir\Jar Files\jars\tcjavaspy2.jar;c:\Test Dir\Jar Files\jars\xalan.jar;c:\Test Dir\Jar Files\jars\xml-apis.jar;c:\Test Dir\Jar Files\jars\galaxieSDK.jar;c:\Test Dir\Jar Files\jars\CapabilityRobustness.jar;c:\Test Dir\Jar Files\jars\commons-math-1.1.jar;
+Creating VM!
+retval: 0
+InstallPath: c:\Test Dir\Jar Files
+JarPath: c:\Test Dir\Jar Files\jars
+ classPath option: -Djava.class.path=c:\Test Dir\Jar Files\jars\FusionFramework.jar;c:\Test Dir\Jar Files\jars\FCAdmin.jar;c:\Test Dir\Jar Files\jars\FusionAE.jar;c:\Test Dir\Jar Files\jars\OSS-infobus.jar;c:\Test Dir\Jar Files\jars\smatrix.jar;c:\Test Dir\Jar Files\jars\jama.jar;c:\Test Dir\Jar Files\jars\activation.jar;c:\Test Dir\Jar Files\jars\mail.jar;c:\Test Dir\Jar Files\jars\tcjavaspy2.jar;c:\Test Dir\Jar Files\jars\xalan.jar;c:\Test Dir\Jar Files\jars\xml-apis.jar;c:\Test Dir\Jar Files\jars\galaxieSDK.jar;c:\Test Dir\Jar Files\jars\CapabilityRobustness.jar;c:\Test Dir\Jar Files\jars\commons-math-1.1.jar;
+Creating VM!
+retval: 0
+InstallPath: c:\tmp
+JarPath: c:\tmp\jars
+ classPath option: -Djava.class.path=c:\tmp\jars\FusionFramework.jar;c:\tmp\jars\FCAdmin.jar;c:\tmp\jars\FusionAE.jar;c:\tmp\jars\OSS-infobus.jar;c:\tmp\jars\smatrix.jar;c:\tmp\jars\jama.jar;c:\tmp\jars\activation.jar;c:\tmp\jars\mail.jar;c:\tmp\jars\tcjavaspy2.jar;c:\tmp\jars\xalan.jar;c:\tmp\jars\xml-apis.jar;c:\tmp\jars\galaxieSDK.jar;c:\tmp\jars\CapabilityRobustness.jar;c:\tmp\jars\commons-math-1.1.jar;
+Creating VM!
+retval: 0
+InstallPath: c:\tmp\ReallyLongDirName
+JarPath: c:\tmp\ReallyLongDirName\jars
+ classPath option: -Djava.class.path=c:\tmp\ReallyLongDirName\jars\FusionFramework.jar;c:\tmp\ReallyLongDirName\jars\FCAdmin.jar;c:\tmp\ReallyLongDirName\jars\FusionAE.jar;c:\tmp\ReallyLongDirName\jars\OSS-infobus.jar;c:\tmp\ReallyLongDirName\jars\smatrix.jar;c:\tmp\ReallyLongDirName\jars\jama.jar;c:\tmp\ReallyLongDirName\jars\activation.jar;c:\tmp\ReallyLongDirName\jars\mail.jar;c:\tmp\ReallyLongDirName\jars\tcjavaspy2.jar;c:\tmp\ReallyLongDirName\jars\xalan.jar;c:\tmp\ReallyLongDirName\jars\xml-apis.jar;c:\tmp\ReallyLongDirName\jars\galaxieSDK.jar;c:\tmp\ReallyLongDirName\jars\CapabilityRobustness.jar;c:\tmp\ReallyLongDirName\jars\commons-math-1.1.jar;
+Creating VM!
+retval: 0

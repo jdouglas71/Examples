@@ -1,0 +1,121 @@
+#
+# An unexpected error has been detected by Java Runtime Environment:
+#
+#  EXCEPTION_FLT_STACK_CHECK (0xc0000092) at pc=0x00ebcea9, pid=2596, tid=2944
+#
+# Java VM: Java HotSpot(TM) Client VM (1.6.0_02-b06 mixed mode)
+# Problematic frame:
+# v  ~RuntimeStub::resolve_opt_virtual_call
+#
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x008e6c00):  JavaThread "main" [_thread_in_Java, id=2944]
+
+siginfo: ExceptionCode=0xc0000092, ExceptionInformation=0x00000000 0x0012ef24 
+
+Registers:
+EAX=0x02fa4a90, EBX=0x00000000, ECX=0x02fa48b8, EDX=0x00000000
+ESP=0x0012eeb8, EBP=0x0012efc8, ESI=0x00000032, EDI=0x00000032
+EIP=0x00ebcea9, EFLAGS=0x00010216
+
+Top of Stack: (sp=0x0012eeb8)
+0x0012eeb8:   ffff1372 ffff0022 ffffffff 00ea03a9
+0x0012eec8:   073c001b 0012ef98 ffff0023 00000000
+0x0012eed8:   00000000 00000000 00000000 00000000
+0x0012eee8:   00000000 00000000 00000000 00000000
+0x0012eef8:   00000000 00000000 00000000 00000000
+0x0012ef08:   2c000000 4005c801 00000000 c0000000
+0x0012ef18:   00004002 00000000 4008c400 7c91003d
+0x0012ef28:   7c363593 008e0000 00000000 7c363598 
+
+Instructions: (pc=0x00ebcea9)
+0x00ebce99:   00 00 83 ec 6c dd 34 24 9b dd 24 24 dd 5c 24 6c
+0x00ebcea9:   dd 5c 24 74 dd 5c 24 7c dd 9c 24 84 00 00 00 dd 
+
+
+Stack: [0x00030000,0x00130000),  sp=0x0012eeb8,  free space=1019k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+v  ~RuntimeStub::resolve_opt_virtual_call
+J  sun.net.www.ParseUtil.encodePath(Ljava/lang/String;Z)Ljava/lang/String;
+j  sun.misc.URLClassPath$JarLoader.checkResource(Ljava/lang/String;ZLjava/util/jar/JarEntry;)Lsun/misc/Resource;+10
+j  sun.misc.URLClassPath$JarLoader.getResource(Ljava/lang/String;Z)Lsun/misc/Resource;+60
+j  sun.misc.URLClassPath.getResource(Ljava/lang/String;Z)Lsun/misc/Resource;+53
+j  java.net.URLClassLoader$1.run()Ljava/lang/Object;+26
+v  ~StubRoutines::call_stub
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x170fd800 JavaThread "Low Memory Detector" daemon [_thread_blocked, id=1488]
+  0x170f8c00 JavaThread "CompilerThread0" daemon [_thread_blocked, id=3032]
+  0x170f7800 JavaThread "Attach Listener" daemon [_thread_blocked, id=2348]
+  0x170f6800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=3080]
+  0x170e7400 JavaThread "Finalizer" daemon [_thread_blocked, id=1872]
+  0x170e3000 JavaThread "Reference Handler" daemon [_thread_blocked, id=1796]
+=>0x008e6c00 JavaThread "main" [_thread_in_Java, id=2944]
+
+Other Threads:
+  0x170e0000 VMThread [id=2512]
+  0x170ff800 WatcherThread [id=2632]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ def new generation   total 4544K, used 671K [0x02f10000, 0x033f0000, 0x042c0000)
+  eden
+[error occurred during error reporting, step 190, id 0xc0000092]
+
+Dynamic libraries:
+0x00400000 - 0x0041c000 	C:\work\work\MyC++\JNI\StartVM\LaunchService.exe
+0x7c900000 - 0x7c9af000 	C:\WINDOWS\system32\ntdll.dll
+0x7c800000 - 0x7c8f6000 	C:\WINDOWS\system32\kernel32.dll
+0x77dd0000 - 0x77e6b000 	C:\WINDOWS\system32\ADVAPI32.dll
+0x77e70000 - 0x77f02000 	C:\WINDOWS\system32\RPCRT4.dll
+0x77fe0000 - 0x77ff1000 	C:\WINDOWS\system32\Secur32.dll
+0x6d870000 - 0x6dab9000 	c:\tools\jdk1.6.0_02\jre\bin\client\jvm.dll
+0x7e410000 - 0x7e4a1000 	C:\WINDOWS\system32\USER32.dll
+0x77f10000 - 0x77f59000 	C:\WINDOWS\system32\GDI32.dll
+0x76b40000 - 0x76b6d000 	C:\WINDOWS\system32\WINMM.dll
+0x7c360000 - 0x7c3b6000 	C:\WINDOWS\system32\MSVCR71.dll
+0x76390000 - 0x763ad000 	C:\WINDOWS\system32\IMM32.DLL
+0x636e0000 - 0x63708000 	C:\Program Files\Spyware Doctor\smumhook.dll
+0x77120000 - 0x771ab000 	C:\WINDOWS\system32\oleaut32.dll
+0x77c10000 - 0x77c68000 	C:\WINDOWS\system32\msvcrt.dll
+0x774e0000 - 0x7761d000 	C:\WINDOWS\system32\ole32.dll
+0x6d3c0000 - 0x6d3c8000 	c:\tools\jdk1.6.0_02\jre\bin\hpi.dll
+0x76bf0000 - 0x76bfb000 	C:\WINDOWS\system32\PSAPI.DLL
+0x6d820000 - 0x6d82c000 	c:\tools\jdk1.6.0_02\jre\bin\verify.dll
+0x6d460000 - 0x6d47f000 	c:\tools\jdk1.6.0_02\jre\bin\java.dll
+0x6d860000 - 0x6d86f000 	c:\tools\jdk1.6.0_02\jre\bin\zip.dll
+
+VM Arguments:
+jvm_args: -Xms64m -Xmx256m -DFusionVMKey=TRUE
+java_command: <unknown>
+Launcher Type: generic
+
+Environment Variables:
+JAVA_HOME=c:\tools\jdk1.6.0_02
+PATH=C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Program Files\Intel\Wireless\Bin\;C:\Program Files\Diskeeper Corporation\Diskeeper\;C:\Program Files\ThinkPad\ConnectUtilities;C:\Program Files\Common Files\Lenovo;C:\Program Files\Lenovo\Client Security Solution;c:\Program Files\Microsoft SQL Server\90\Tools\binn\;C:\Program Files\Starbase\StarGate SDK\Lib;c:\jasond\utils;c:\jasond\batch;c:\tools\jdk1.6.0_02\bin;c:\tools\ant\bin;c:\tools\bc5\bin;c:\tools\jdk1.6.0_02\jre\bin;c:\tools\SlickEdit 2007\win;;C:\Program Files\Intel\Wireless\Bin\;C:\Program Files\Intel\Wireless\Bin\;c:\tools\jdk1.6.0_02\jre\bin\client;C:\jet6.4-eval\bin;C:\Program Files\Astaro\Astaro SSL VPN Client\bin
+USERNAME=jdouglas
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 13, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows XP Build 2600 Service Pack 3
+
+CPU:total 2 (2 cores per cpu, 1 threads per core) family 6 model 15 stepping 13, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3
+
+Memory: 4k page, physical 2097151k(2097151k free), swap 4194303k(3664580k free)
+
+vm_info: Java HotSpot(TM) Client VM (1.6.0_02-b06) for windows-x86, built on Jul 12 2007 01:16:14 by "java_re" with unknown MS VC++:1310
+

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyLinearLayout</string>
+    <string name="red_col">Red is Dead!</string>
+    <string name="blue_col">BlueBirds in the Morning.</string>
+    <string name="green_col">Green Lantern</string>
+    <string name="yellow_col">Mellow Yellow.</string>
+    <string name="row_one">First Row.</string>
+    <string name="row_two">Second Row. </string>
+    <string name="row_three">Third Row.</string>
+    <string name="row_four">Fourth Row.</string>
+</resources>

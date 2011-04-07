@@ -1,0 +1,475 @@
+ <!--
+ # ##### BEGIN LICENSE BLOCK #####
+ # Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ #
+ # The contents of this file are subject to the Mozilla Public
+ # License Version 1.1 (the "License"); you may not use this file
+ # except in compliance with the License. You may obtain a copy of
+ # the License at http://www.mozilla.org/MPL/
+ #
+ # Software distributed under the License is distributed on an "AS IS" basis,
+ # WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ # for the specific language governing rights and limitations under the
+ # License.
+ #
+ # Contributor(s):
+ #   C.N Medappa <jrex_moz@yahoo.com>
+ #
+ # Alternatively, the contents of this file may be used under the terms of
+ # either the GNU General Public License Version 2 or later (the "GPL"), or
+ # the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ # in which case the provisions of the GPL or the LGPL are applicable instead
+ # of those above. If you wish to allow use of your version of this file only
+ # under the terms of either the GPL or the LGPL, and not to allow others to
+ # use your version of this file under the terms of the NPL, indicate your
+ # decision by deleting the provisions above and replace them with the notice
+ # and other provisions required by the GPL or the LGPL. If you do not delete
+ # the provisions above, a recipient may use your version of this file under
+ # the terms of any one of the NPL, the GPL or the LGPL.
+ #
+ # ##### END LICENSE BLOCK ##### #
+ -->
+
+<project name="JRex" default="dist" basedir=".">
+	<target name="init" unless="jdk1.4.2+">
+		<!-- Set all the default properties -->
+		<tstamp/>
+		<property file="JRex.properties" />
+		<property environment="myenv" />
+	</target>
+
+	<target name="clean" depends="init">
+		<delete includeEmptyDirs="true" failonerror="false">
+		   <fileset dir="${build}"/>
+		</delete>
+		<delete includeEmptyDirs="true" failonerror="false">
+		   <fileset dir="${doc}"/>
+		</delete>
+		<delete includeEmptyDirs="true" failonerror="false">
+		   <fileset dir="${jni}" excludes="*.cpp, JRexNavigation.h,JRexCanvas.h, **/JRexDOMUserDataHandler.h **/*.cpp, **/Makefile*, **/module.ver, **/JRexDOMGlobals.h, **/JRexDOMEventListener.h, **/JRexNodeFilter.h"/>
+		</delete>
+
+		<delete includeEmptyDirs="true" failonerror="false">
+		   <fileset dir="${lib}"/>
+		</delete>
+
+		<delete includeEmptyDirs="true" failonerror="false">
+		   <fileset dir="${ws}"/>
+		</delete>
+
+		<exec dir="${nsrc}" executable="make" >
+		  <arg line="clean -e JREX_DOM=${build.dom} JREX_DOM_HTML2=${build.dom.html2} JREX_MOZ1_4=${build.1.4} JREX_LIVECONNECT=${jrex.liveconnect}"/>
+		</exec>
+	</target>
+
+	<target name="prepare"  depends="init">
+		<mkdir dir="${build}" />
+		<mkdir dir="${jni}" />
+		<copy todir="${build}">
+		    <fileset dir="${res}" >
+			<include name="**/**"/>
+			<exclude name="**/run*"/>
+			<exclude name="**/*jnlp"/>
+		    </fileset>
+		</copy>
+	</target>
+
+	<target name="compile" depends="prepare">
+		<javac srcdir="${src}/java"  debug="${DEBUG_BUILD}" deprecation="on"
+			destdir="${build}"
+			source="1.4"
+			excludes="**/dom/**"
+		classpath ="${classpath}" />
+		<antcall target="compiledom"/>
+	</target>
+
+	<target name="compiledom" depends="prepare" if="build.dom">
+		<javac srcdir="${src}/java"  debug="${DEBUG_BUILD}" deprecation="on"
+			destdir="${build}"
+			source="1.4"
+			includes="**/dom/**" excludes="**/html2/**"
+		classpath ="${classpath}" />
+		<antcall target="compiledomhtml2"/>
+	</target>
+
+	<target name="compiledomhtml2" depends="prepare" if="build.dom.html2">
+		<javac srcdir="${src}/java"  debug="${DEBUG_BUILD}" deprecation="on"
+			destdir="${build}"
+			source="1.4"
+			includes="**/html2/**"
+		classpath ="${classpath}" />
+	</target>
+	
+
+	<target name="run" depends="compile">
+		<copy todir="${jrex_gre}">
+		    <fileset dir="${src}/native" >
+			<include name="*.so"/>
+			<include name="*.dll"/>
+		    </fileset>
+		</copy>
+		<java classname="test.JRexExample"
+		     		fork="yes" classpath ="${classpath}" output="jrex.log" error="jrex.err" >
+		     	<arg value="-verbose"/>
+		        <jvmarg value="-enableassertions"/>
+		        <jvmarg value="-Xcheck:jni"/>
+    			<sysproperty key="JREX_DEBUG" value="${JREX_DEBUG}"/>
+    			<sysproperty key="jrex.gre.path" value="${jrex.gre.path}"/>
+    			<sysproperty key="jrex.dom.enable" value="${jrex.dom.enable}"/>
+ 		</java>
+	</target>
+
+	<target name="doc" depends="init" >
+		<mkdir dir="doc" />
+		<javadoc packagenames="org.*"
+		   sourcepath="${src}/java"
+		   classpath="${classpath}"
+		   defaultexcludes="yes"
+		   destdir="doc"
+		   Author="true"
+		   version="true"
+		   use="true"
+		   source="1.4"
+		   windowtitle="JRex Documentation">
+		   <doctitle><![CDATA[<h1>JRex Documentation</h1>]]></doctitle>
+		   <bottom><![CDATA[<i>Copyright &#169; 2004 C.N.Medappa. All Rights Reserved.</i>]]></bottom>
+		   <link offline="true" href="http://java.sun.com/j2se/1.4.2/docs/api/" packagelistLoc="${myenv.JAVA_HOME}\docs\api"/>
+		</javadoc>
+  	</target>
+
+	<target name="gendomjni" depends="compile" if="build.dom">
+		<javah destdir="${jni}/dom" class="org.mozilla.jrex.dom.JRexAttrImpl,
+		org.mozilla.jrex.dom.JRexCDATASectionImpl,
+		org.mozilla.jrex.dom.JRexCharacterDataImpl,
+		org.mozilla.jrex.dom.JRexCommentImpl,
+		org.mozilla.jrex.dom.JRexDocumentFragmentImpl,
+		org.mozilla.jrex.dom.JRexDocumentImpl,
+		org.mozilla.jrex.dom.JRexDocumentTypeImpl,
+		org.mozilla.jrex.dom.JRexDOMImplementationImpl,
+		org.mozilla.jrex.dom.JRexElementImpl,
+		org.mozilla.jrex.dom.JRexEntityImpl,
+		org.mozilla.jrex.dom.JRexEntityReferenceImpl,
+		org.mozilla.jrex.dom.JRexNamedNodeMapImpl,
+		org.mozilla.jrex.dom.JRexNodeImpl,
+		org.mozilla.jrex.dom.JRexNodeListImpl,
+		org.mozilla.jrex.dom.JRexNotationImpl,
+		org.mozilla.jrex.dom.JRexProcessingInstructionImpl,
+		org.mozilla.jrex.dom.JRexTextImpl,
+		org.mozilla.jrex.dom.ranges.JRexDOMRangeImpl,
+		org.mozilla.jrex.dom.ranges.JRexDocumentRangeImpl,
+		org.mozilla.jrex.dom.events.JRexDocumentEventImpl,
+		org.mozilla.jrex.dom.events.JRexEventImpl,
+		org.mozilla.jrex.dom.events.JRexEventTargetImpl,
+		org.mozilla.jrex.dom.events.JRexMouseEventImpl,
+		org.mozilla.jrex.dom.events.JRexMutationEventImpl,
+		org.mozilla.jrex.dom.events.JRexUIEventImpl,
+		org.mozilla.jrex.dom.views.JRexAbstractViewImpl,
+		org.mozilla.jrex.dom.views.JRexDocumentViewImpl,
+		org.mozilla.jrex.dom.traversal.JRexDocumentTraversalImpl,
+		org.mozilla.jrex.dom.traversal.JRexNodeIteratorImpl,
+		org.mozilla.jrex.dom.traversal.JRexTreeWalkerImpl"
+		classpath ="${classpath}"/>
+		<javah destdir="${jni}" class="org.mozilla.jrex.selection.JRexSelectionImpl"
+		classpath ="${classpath}"/>
+		<antcall target="genhtmldomjni"/>
+	</target>
+
+	<target name="genhtmldomjni" depends="compile" if="build.dom.html2">
+		<javah destdir="${jni}/dom/html2" class="
+		org.mozilla.jrex.dom.html2.JRexHTMLElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLDocumentImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLFormElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLInputElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLCollectionImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLOptionsCollectionImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLImageElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLOptGroupElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLOptionElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLSelectElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLTextAreaElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLAnchorElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLScriptElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLTableCaptionElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLTableColElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLTableElementImpl,		
+		org.mozilla.jrex.dom.html2.JRexHTMLTableSectionElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLTableRowElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLTableCellElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLAppletElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLObjectElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLModElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLPreElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLOListElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLMapElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLLegendElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLLabelElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLLIElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLIsIndexElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLFrameSetElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLFontElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLDirectoryElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLUListElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLMenuElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLDListElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLBaseElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLHtmlElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLFieldSetElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLHeadElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLHeadingElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLDivElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLQuoteElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLTitleElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLParagraphElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLBRElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLAreaElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLFrameElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLIFrameElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLLinkElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLBaseFontElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLStyleElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLParamElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLMetaElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLHRElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLButtonElementImpl,
+		org.mozilla.jrex.dom.html2.JRexHTMLBodyElementImpl"		
+		classpath ="${classpath}"/>
+	</target>
+
+	<target name="genjni" depends="gendomjni">
+		<javah destdir="${jni}" class="org.mozilla.jrex.navigation.WebNavigationImpl,
+		org.mozilla.jrex.xpcom.JRexXPCOMImpl,
+		org.mozilla.jrex.ui.JRexCanvas,
+		org.mozilla.jrex.ui.JRexFindConfig,
+		org.mozilla.jrex.navigation.WebNavigationImpl,
+		org.mozilla.jrex.event.JRexEventManager,
+		org.mozilla.jrex.event.window.WindowEvent,
+		org.mozilla.jrex.event.window.CreateEventParam,
+		org.mozilla.jrex.event.history.HistoryEvent,
+		org.mozilla.jrex.event.history.IntegerEventParam,
+		org.mozilla.jrex.event.progress.ProgressEvent,
+		org.mozilla.jrex.event.progress.StateChangeEventParam,
+		org.mozilla.jrex.event.progress.StatusChangeEventParam,
+		org.mozilla.jrex.event.progress.ProgressChangeEventParam,
+		org.mozilla.jrex.event.context.ContextMenuEvent,
+		org.mozilla.jrex.event.tooltip.TooltipEvent,
+		org.mozilla.jrex.event.observer.ObserverEvent,
+		org.mozilla.jrex.event.uricontent.URIContentEvent,
+		org.mozilla.jrex.event.uricontent.CanHandleEventParam,
+		org.mozilla.jrex.event.uricontent.DoContentEventParam,
+		org.mozilla.jrex.navigation.History,
+		org.mozilla.jrex.navigation.HistoryEntry,
+		org.mozilla.jrex.pref.JRexPreference,
+		org.mozilla.jrex.io.JRexInputStream,
+		org.mozilla.jrex.liveconnect.JRexLiveConnectSessionImpl,
+		org.mozilla.jrex.liveconnect.JRexJSObject"
+		classpath ="${classpath}"/>
+	</target>
+
+	<target name="makenolog" depends="clean,genjni">
+		<exec dir="${nsrc}" executable="make" >
+		  <arg line="clean"/>
+		</exec>
+		<exec dir="${nsrc}" executable="make" >
+		  <arg line="-e JREX_DEBUG= JREX_DOM=${build.dom} JREX_DOM_HTML2=${build.dom.html2} JREX_MOZ1_4=${build.1.4} JREX_LIVECONNECT=${jrex.liveconnect}"/>
+		</exec>
+
+	</target>
+
+	<target name="devmake" depends="init">
+		<exec dir="${nsrc}" executable="make" >
+		  <arg line="-e JREX_DEBUG=-DJREX_DEBUG JREX_DOM=${build.dom} JREX_DOM_HTML2=${build.dom.html2} JREX_MOZ1_4=${build.1.4} JREX_LIVECONNECT=${jrex.liveconnect}"/>
+		</exec>
+	</target>
+
+	<target name="make" depends="clean,genjni">
+		<exec dir="${nsrc}" executable="make" >
+		  <arg line="clean"/>
+		</exec>
+		<exec dir="${nsrc}" executable="make" >
+		  <arg line="-e JREX_DEBUG=-DJREX_DEBUG JREX_DOM=${build.dom} JREX_DOM_HTML2=${build.dom.html2} JREX_MOZ1_4=${build.1.4} JREX_LIVECONNECT=${jrex.liveconnect}"/>
+		</exec>
+	</target>
+
+	<target name="lib" depends="compile">
+		<delete includeEmptyDirs="true" failonerror="false">
+		   <fileset dir="${lib}"/>
+		</delete>
+
+		<mkdir dir="${lib}" />
+
+		<jar jarfile="${lib}/JRex.jar"
+		   basedir="${build}"
+		/>
+
+		<copy todir="${lib}">
+		    <fileset dir="${src}/native" >
+			<include name="*.so"/>
+			<include name="*.dll"/>
+		    </fileset>
+		    <fileset dir="${src}/native/jni/dom" >
+			<include name="*.so"/>
+			<include name="*.dll"/>
+		    </fileset>
+
+		    <fileset dir="${res}" >
+			<include name="**/*run*"/>
+		    </fileset>
+		</copy>
+	</target>
+
+	<target name="dist" depends="clean">
+		<delete includeEmptyDirs="true" failonerror="false">
+		   <fileset dir="${dist}"/>
+		</delete>
+		<delete includeEmptyDirs="true" failonerror="false">
+		   <fileset dir="${lib}"/>
+		</delete>
+
+		<mkdir dir="${dist}" />
+		<mkdir dir="${lib}" />
+
+		<zip destfile="${dist}/jrex-src-${JRex_VERSION}.zip">
+		    <fileset dir="." >
+			<include name="${src}/**"/>
+			<include name="${res}/**"/>
+			<include name="build.xml"/>
+			<include name="JRex.properties"/>
+			<include name="Makefile"/>
+			<include name="Makefile.in"/>
+			<exclude name="classes/**"/>
+			<exclude name="*jrex*"/>
+			<exclude name="**/*ilk*"/>
+		    </fileset>
+		</zip>
+
+		<antcall target="doc"/>
+		<zip destfile="${dist}/jrex-doc-${JRex_VERSION}.zip"
+		   basedir="${doc}"
+		/>
+
+		<antcall target="make"/>
+
+		<mkdir dir="${lib}" />
+		<jar jarfile="${lib}/JRex.jar"
+		   basedir="${build}"
+		/>
+		<copy todir="${lib}">
+		    <fileset dir="${src}/native" >
+			<include name="*.so"/>
+			<include name="*.dll"/>
+		    </fileset>
+		    <fileset dir="${res}" >
+			<include name="**/*run*"/>
+		    </fileset>
+		</copy>
+
+		<zip destfile="${dist}/jrex-bin-log-${JRex_VERSION}.zip"
+		   basedir="${lib}"
+		/>
+		<antcall target="makenolog"/>
+
+		<mkdir dir="${lib}" />
+		<jar jarfile="${lib}/JRex.jar"
+		   basedir="${build}"
+		/>
+		<copy todir="${lib}">
+		    <fileset dir="${src}/native" >
+			<include name="*.so"/>
+			<include name="*.dll"/>
+		    </fileset>
+		    <fileset dir="${res}" >
+			<include name="**/*run*"/>
+		    </fileset>
+		</copy>
+
+		<zip destfile="${dist}/jrex-bin-nolog-${JRex_VERSION}.zip"
+		   basedir="${lib}"
+		/>
+	</target>
+
+	<target name="jrex_gre" depends="compile">
+		<delete includeEmptyDirs="true" failonerror="false">
+		   <fileset dir="${jrex_gre}"/>
+		</delete>
+
+		<mkdir dir="${jrex_gre}"/>
+
+		<copy todir="${jrex_gre}">
+		    <fileset dir="${moz_gre}" >
+			<exclude name="*xpiclean*"/>
+			<exclude name="**/*.dat"/>
+		    </fileset>
+		</copy>
+		<copy todir="${jrex_gre}">
+		    <fileset dir="${moz_bin}" >
+		        <include name="windbgdlg.exe"/><!--Required if we r in debug mode-->
+		        <include name="LICENSE"/>
+                        <include name="*gtksuper*"/>
+                        <include name="*gtkxt*"/>
+			<include name="**/res/**"/>
+			<exclude name="**/res/**samples/**"/>
+			<exclude name="**/res/**throbber/**"/>
+			<include name="**/defaults/**"/>
+			<include name="**/chrome/*.jar"/>
+			<exclude name="**/chrome/modern*"/>
+			<exclude name="**/chrome/embed*"/>
+			<exclude name="**/chrome/inspector*"/>
+			<include name="**/chrome/*.txt"/>
+			<include name="**/plugins/*nul*"/>
+			<include name="**/components/*gkwidget*"/>
+                        <include name="**/components/compreg.dat"/><!--Required for linux for some AutoReg Fails-->
+			<include name="**/components/*mork*"/>
+			<include name="**/components/*appcomps*"/>
+			<include name="**/components/*taskmgr*"/>
+			<include name="**/components/*txmgr*"/>
+			<include name="**/components/*p3p*"/>
+			<include name="**/components/*find*"/>
+			<include name="**/components/*xpconnect*"/>
+			<include name="**/components/*jsdom*"/>
+			<include name="**/components/*elperAppDlg*"/>
+			<include name="**/components/*mimetype*"/>
+			<include name="**/components/*exthandler*"/>
+			<include name="**/components/*embed_base*"/>
+			<include name="**/components/*dom_loadsave*"/>
+			<include name="**/components/*layout_xul_tree*"/>
+			<include name="**/components/*negotiateauth*"/>
+			<include name="**/components/*progressDlg*"/>
+			<include name="**/components/*ProxyAutoConfig*"/>
+		    </fileset>
+		</copy>
+	</target>
+
+	<target name="makews" depends="init">
+		<condition property="jrex.keystore.avail">
+			<not>
+				<available file="${keystore}"/>
+			</not>
+		</condition>
+		<fail if="jrex.keystore.avail" message="**** You don't have KeyStore Created!!! See 'JRex.properties' for info.****"/>
+		<antcall target="lib"/>
+		<antcall target="jrex_gre"/>
+
+		<delete includeEmptyDirs="true" failonerror="false">
+		   <fileset dir="${ws}"/>
+		</delete>
+		<mkdir dir="${ws}" />
+
+		<zip destfile="${ws}/jrex_gre.zip" basedir="../../dist" includes="**/jrex_gre/**"
+		excludes="**/*jrex*"/>
+
+		<jar destfile="${lib}/JRexDll.jar" basedir="${jrex_gre}" includes="**/*jrex*"/>
+
+		<copy file="${build}/org/mozilla/jrex/JRexGreInstaller.class" todir="${ws}/org/mozilla/jrex"/>
+		<move file="${ws}/jrex_gre.zip" toDir="${ws}/org/mozilla/jrex" />
+		<jar destfile="${ws}/jrex_gre.jar" basedir="${ws}" />
+
+		<signjar jar="${lib}/JRex.jar" signedjar="${ws}/JRex.jar" keystore="${keystore}" alias="${alias}" storepass="${storepass}"/>
+		<signjar jar="${lib}/JRexDll.jar" signedjar="${ws}/JRexDll.jar" keystore="${keystore}" alias="${alias}" storepass="${storepass}"/>
+		<signjar jar="${ws}/jrex_gre.jar"  keystore="${keystore}" alias="${alias}" storepass="${storepass}"/>
+		<copy file="${res}/JRex.jnlp" todir="${ws}"/>
+		<copy file="${res}/JRex_GRE.jnlp" todir="${ws}"/>
+		<delete includeEmptyDirs="true" failonerror="false">
+		   <fileset dir="${ws}" includes="org/**"/>
+		</delete>		
+	</target>
+</project>

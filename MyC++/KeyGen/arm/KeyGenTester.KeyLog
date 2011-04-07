@@ -1,0 +1,4 @@
+::
+:: "Date (YYYY.MM.DD)", "name", "key", "certificate", "hardware fingerprint", "extra information"
+::
+"2002.02.19", "Joey", "6484-08FE-941A-4BCA", "KeyGenTester", "N/A", "0"

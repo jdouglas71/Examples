@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Created-By: 1.5.0_01-b08 (Sun Microsystems Inc.)
+Ant-Version: Apache Ant 1.6.5
+
+Name: org/mozilla/jrex/jrex_gre.zip
+SHA1-Digest: NotmiImVAAjRaNsq/IGiiiSg/bk=
+
+Name: org/mozilla/jrex/JRexGreInstaller.class
+SHA1-Digest: oLNeMAzkt8lBEjsd8SikN7SBi1U=
+

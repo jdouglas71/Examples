@@ -1,0 +1,10 @@
+::
+:: "Date (YYYY.MM.DD)","name","key","certificate","hardware fingerprint","extra information"
+::
+"2004.03.03","Jason","070A-0D02-AB47-AE44","Permanent ONE","CBCE-A456","0"
+"2004.03.03","Jason","88FA-3A7C-67A1-AB80","Permanent ONE","5ADC-F4C0","0"
+"2004.03.03","Jason","1402-ADFA-0E12-3AC2","Permanent ONE","5ACD-F4C0","0"
+"2004.03.03","Jason","010A-B222-8E82-27C1","Permanent TWO","5ACD-F4C0","0"
+"2004.03.03","Jason","1402-ADFA-0E12-3AC2","Permanent ONE","5ACD-F4C0","0"
+"2004.03.03","Jason","FC78-413D-03C3-9A2B","Permanent ONE","7F81-7D4F","0"
+"2004.03.03","Jason","0A66-D792-F46C-5868","Permanent THREE","7F81-7D4F","0"
